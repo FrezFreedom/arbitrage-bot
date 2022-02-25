@@ -43,3 +43,27 @@ nobitex_bid_volume = nobitex_data['asks'][0][1]
 nobitex_ask_volume = nobitex_data['bids'][0][1]
 
 print(nobitex_ask_price, nobitex_bid_price, nobitex_ask_volume, nobitex_bid_volume)
+
+#################################################
+
+request_to_exir = "https://api.exir.io/v1/orderbooks?symbol=usdt-irt"
+    
+while True:
+    try:
+        response_from_exir = requests.get(request_to_exir)
+        break
+    except Exception as error:
+        time.sleep(5)
+
+exir_data = response_from_exir.json()
+
+raw_exir_data = exir_data['usdt-irt']
+
+exir_bid_price = raw_exir_data['bids'][0][0]
+exir_ask_price = raw_exir_data['asks'][0][0]
+exir_bid_volume = raw_exir_data['bids'][0][1]
+exir_ask_volume = raw_exir_data['asks'][0][1]
+
+print(exir_ask_price, exir_bid_price, exir_ask_volume, exir_bid_volume)
+
+#################################################
