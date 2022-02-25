@@ -3,6 +3,19 @@ from api_keys import *
 import time
 import requests
 
+all_crypto_shop = []
+bomb = u'\U0001F4A3'
+nazar = u'\U0001F9FF'
+check_mark = u'\U00002705'
+
+def send_message_to_arbitrage_channel(message_):
+    try:
+        requests.get('https://api.telegram.org/bot5175422403:AAEQkqkYYGQCS84WIXevC-ed2ruZZGKQHhU/sendMessage?chat_id=-1001543655927&text=' + message_ +'&parse_mode=html')
+    except Exception as error:
+        print("Telegram api has some problems, in line 21 error is: " + str(error))
+        print("bot will go sleep for 5 seconds!")
+        time.sleep(5)
+
 request_to_wallex = "https://api.wallex.ir/v1/depth?symbol=USDTTMN"
     
 while True:
@@ -23,6 +36,7 @@ wallex_ask_volume = float(raw_wallex_data['ask'][0]['quantity'])
 
 print("wallex ", wallex_ask_price, wallex_bid_price, wallex_ask_volume, wallex_bid_volume)
 
+all_crypto_shop.append(("wallex", wallex_ask_price, wallex_bid_price, wallex_ask_volume, wallex_bid_volume))
 
 ####################################################
 
@@ -44,6 +58,8 @@ nobitex_bid_volume = float(nobitex_data['asks'][0][1])
 nobitex_ask_volume = float(nobitex_data['bids'][0][1])
 
 print("nobitex ", nobitex_ask_price, nobitex_bid_price, nobitex_ask_volume, nobitex_bid_volume)
+
+all_crypto_shop.append(("nobitex", nobitex_ask_price, nobitex_bid_price, nobitex_ask_volume, nobitex_bid_volume))
 
 #################################################
 
@@ -67,6 +83,8 @@ exir_ask_volume = float(raw_exir_data['asks'][0][1])
 
 print("exir ", exir_ask_price, exir_bid_price, exir_ask_volume, exir_bid_volume)
 
+all_crypto_shop.append(("exir", exir_ask_price, exir_bid_price, exir_ask_volume, exir_bid_volume))
+
 #################################################
 
 request_to_arzpaya = "https://api.arzpaya.com/Public/getorderbook/irt/1"
@@ -88,6 +106,8 @@ arzpaya_bid_volume = float(raw_arzpaya_data['Buys'][0]['Volume'])
 arzpaya_ask_volume = float(raw_arzpaya_data['Sells'][0]['Volume'])
 
 print("arzpaya ", arzpaya_ask_price, arzpaya_bid_price, arzpaya_ask_volume, arzpaya_bid_volume)
+
+all_crypto_shop.append(("arzpaya", arzpaya_ask_price, arzpaya_bid_price, arzpaya_ask_volume, arzpaya_bid_volume))
 
 #################################################
 
@@ -113,4 +133,15 @@ for crypto in okex_data:
 
 print("okex ", okex_ask_price, okex_bid_price, okex_ask_volume, okex_bid_volume)
 
+all_crypto_shop.append(("okex", okex_ask_price, okex_bid_price, okex_ask_volume, okex_bid_volume))
+
 #################################################
+
+for shop_a in all_crypto_shop:
+    for shop_b in all_crypto_shop:
+        if shop_a[2]/shop_b[1] >= 1.000008:
+            send_message_to_arbitrage_channel( check_mark + " " + shop_a[0] + " ----> " + shop_b[0] + "\n")
+            message_send = ""
+            for shop in all_crypto_shop:
+                message_send += nazar + " " + str(shop[0]) + " ap: " + str(shop[1]) + " bp: " + str(shop[2]) + " av: " + str(shop[3]) + " bv: " + str(shop[4]) + "\n---------------------------\n"    
+            send_message_to_arbitrage_channel(message_send)
