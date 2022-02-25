@@ -67,3 +67,25 @@ exir_ask_volume = raw_exir_data['asks'][0][1]
 print(exir_ask_price, exir_bid_price, exir_ask_volume, exir_bid_volume)
 
 #################################################
+
+request_to_arzpaya = "https://api.arzpaya.com/Public/getorderbook/irt/1"
+    
+while True:
+    try:
+        response_from_arzpaya = requests.get(request_to_arzpaya)
+        break
+    except Exception as error:
+        time.sleep(5)
+
+arzpaya_data = response_from_arzpaya.json()
+
+raw_arzpaya_data = arzpaya_data['USDTIR']
+
+arzpaya_bid_price = raw_arzpaya_data['Buys'][0]['Price']
+arzpaya_ask_price = raw_arzpaya_data['Sells'][0]['Price']
+arzpaya_bid_volume = raw_arzpaya_data['Buys'][0]['Volume']
+arzpaya_ask_volume = raw_arzpaya_data['Sells'][0]['Volume']
+
+print(arzpaya_ask_price, arzpaya_bid_price, arzpaya_ask_volume, arzpaya_bid_volume)
+
+#################################################
