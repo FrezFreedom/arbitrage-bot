@@ -7,10 +7,11 @@ import requests
 bomb = u'\U0001F4A3'
 nazar = u'\U0001F9FF'
 check_mark = u'\U00002705'
+sum_of_volumes = 0
 
 def send_message_to_arbitrage_channel(message_):
     try:
-        requests.get('https://api.telegram.org/bot5175422403:AAEQkqkYYGQCS84WIXevC-ed2ruZZGKQHhU/sendMessage?chat_id=-1001543655927&text=' + message_ +'&parse_mode=html')
+        requests.get('https://api.telegram.org/bot' + telegram_token + '/sendMessage?chat_id=-1001543655927&text=' + message_ +'&parse_mode=html')
     except Exception as error:
         print("Telegram api has some problems, in line 21 error is: " + str(error))
         print("bot will go sleep for 5 seconds!")
@@ -143,7 +144,8 @@ while True:
     for shop_a in all_crypto_shop:
         for shop_b in all_crypto_shop:
             if shop_a[2]/shop_b[1] >= 1.008:
-                send_message_to_arbitrage_channel( check_mark + " " + shop_a[0] + " ----> " + shop_b[0] + " " + str(shop_a[2]/shop_b[1]) +  " \n")
+                sum_of_volumes += min(shop_a[4],shop_b[3])
+                send_message_to_arbitrage_channel( check_mark + " " + shop_a[0] + " ----> " + shop_b[0] + " " + str(shop_a[2]/shop_b[1]) +  " \n sum: ")
                 message_send = ""
                 for shop in all_crypto_shop:
                     message_send += nazar + " " + str(shop[0]) + " ap: " + str(shop[1]) + " bp: " + str(shop[2]) + " av: " + str(shop[3]) + " bv: " + str(shop[4]) + "\n------------------------------------------------------\n"    
