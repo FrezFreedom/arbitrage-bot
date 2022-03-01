@@ -153,11 +153,11 @@ while True:
 
                 sum_of_volumes[(shop_a[0],shop_b[0])] += min(shop_a[4],shop_b[3])
                 volumetric_profit[(shop_a[0],shop_b[0])] += shop_a[2]/shop_b[1] * min(shop_a[4],shop_b[3])
-
-                send_message_to_arbitrage_channel( check_mark + " " + shop_a[0] + " ----> " + shop_b[0] + " " + str(shop_a[2]/shop_b[1]) +  " \n sum volumes: " + str(sum_of_volumes[(shop_a[0],shop_b[0])]) + " \n weighted profit: " + str(volumetric_profit[(shop_a[0],shop_b[0])]/sum_of_volumes[(shop_a[0],shop_b[0])]))
-                message_send = ""
-                for shop in all_crypto_shop:
-                    message_send += nazar + " " + str(shop[0]) + " ap: " + str(shop[1]) + " bp: " + str(shop[2]) + " av: " + str(shop[3]) + " bv: " + str(shop[4]) + "\n------------------------------------------------------\n"    
-                send_message_to_arbitrage_channel(message_send)
+                if sum_of_volumes[(shop_a[0],shop_b[0])] > 0:
+                    send_message_to_arbitrage_channel( check_mark + " " + shop_a[0] + " ----> " + shop_b[0] + " " + str(shop_a[2]/shop_b[1]) +  " \n sum volumes: " + str(sum_of_volumes[(shop_a[0],shop_b[0])]) + " \n weighted profit: " + str(volumetric_profit[(shop_a[0],shop_b[0])]/sum_of_volumes[(shop_a[0],shop_b[0])]))
+                    message_send = ""
+                    for shop in all_crypto_shop:
+                        message_send += nazar + " " + str(shop[0]) + " ap: " + str(shop[1]) + " bp: " + str(shop[2]) + " av: " + str(shop[3]) + " bv: " + str(shop[4]) + "\n------------------------------------------------------\n"    
+                    send_message_to_arbitrage_channel(message_send)
     
     time.sleep(65)
